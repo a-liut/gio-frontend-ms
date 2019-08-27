@@ -1,0 +1,9 @@
+<h1>{{.Title}}</h1>
+<ul>
+    {{range .Rooms}}
+        <li>
+            <h3><a href="/rooms/{{.ID}}">{{.Name}}</a></h3>
+            <p>ID: {{.ID}}</p>
+        </li>
+    {{end}}
+</ul>

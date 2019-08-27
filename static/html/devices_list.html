@@ -1,0 +1,11 @@
+<h1>{{.Title}}</h1>
+<ul>
+    {{range .Devices}}
+        <li>
+            <h3><a href="rooms/{{.Room}}/devices/{{.ID}}">{{.Name}}</a></h3>
+            <p>ID: {{.ID}}</p>
+            <p>Mac: {{.Mac}}</p>
+            <p>Room: {{.Room}}</p>
+        </li>
+    {{end}}
+</ul>
