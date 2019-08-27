@@ -11,6 +11,7 @@
 package api
 
 import (
+	"gio-frontend-ms/pkg/model"
 	"gio-frontend-ms/pkg/repository"
 	"github.com/gorilla/mux"
 	"html/template"
@@ -117,11 +118,20 @@ func GetDevice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	readings, err := repo.GetReadings(roomId, deviceId, -1, "")
+	errorMessage := ""
+	if err != nil {
+		errorMessage = err.Error()
+		readings = []*model.Reading{}
+	}
+
 	w.WriteHeader(http.StatusOK)
 
 	data := DevicePageData{
-		Title:  "Device",
-		Device: device,
+		Title:        "Device",
+		Device:       device,
+		Readings:     readings,
+		ErrorMessage: errorMessage,
 	}
 
 	if err := templates.ExecuteTemplate(w, "device.html", data); err != nil {

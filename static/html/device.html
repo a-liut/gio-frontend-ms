@@ -2,3 +2,18 @@
 <p>ID: {{.Device.ID}}</p>
 <p>Mac: {{.Device.Mac}}</p>
 <p>Room: {{.Device.Room}}</p>
+
+<ul>
+    {{range .Readings}}
+        <ul>
+            <p>ID: {{.ID}}</p>
+            <p>Name: {{.Name}}</p>
+            <p>Value: {{.Value}}</p>
+            <p>Unit: {{.Unit}}</p>
+        </ul>
+    {{end}}
+</ul>
+
+{{if .ErrorMessage ne ""}}
+    <p>ERROR: {{.ErrorMessage}}</p>
+{{end}}

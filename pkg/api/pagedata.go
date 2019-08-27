@@ -18,6 +18,8 @@ type ListDevicesPageData struct {
 }
 
 type DevicePageData struct {
-	Title  string
-	Device *model.Device
+	Title        string
+	Device       *model.Device
+	Readings     []*model.Reading
+	ErrorMessage string
 }
