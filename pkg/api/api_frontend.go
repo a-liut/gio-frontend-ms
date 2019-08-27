@@ -11,6 +11,7 @@
 package api
 
 import (
+	"fmt"
 	"gio-frontend-ms/pkg/model"
 	"gio-frontend-ms/pkg/repository"
 	"github.com/gorilla/mux"
@@ -91,7 +92,7 @@ func ListDevices(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	data := ListDevicesPageData{
-		Title:   "Devices",
+		Title:   fmt.Sprintf("Devices of room %s", roomId),
 		Devices: devices,
 	}
 
