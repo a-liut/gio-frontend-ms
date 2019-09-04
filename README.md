@@ -1,5 +1,5 @@
 # gio-frontend-ms
-Microservice that exposes a web interface for interacting with the Giò Plant platform.
+Microservice that exposes a web User Interface (UI) allowing users to interact with the Giò Plant platform.
 
 ## Run
 
@@ -25,10 +25,10 @@ go build -o frontend cmd/frontend/main.go
 
 ## Endpoints
 
-- /rooms: List all available rooms
+- /rooms: Lists all available rooms
 
-- /rooms/{id}: Get information about a room
+- /rooms/{roomId}: Gets information about a room
 
-- /rooms/{id}/devices: List all available devices in a room
+- /rooms/{roomId}/devices: Lists all available devices in a room
 
-- /rooms/{id}/devices/{id}: Get information about a device in a room
+- /rooms/{roomId}/devices/{deviceId}: Gets information about a device in a room
