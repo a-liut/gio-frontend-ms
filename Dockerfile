@@ -20,6 +20,8 @@ LABEL Name=gio-frontend-ms Version=1.0.0
 
 # Copy our static executable.
 COPY --from=builder /go/bin/frontend /frontend
+
+ARG CACHEBUST=1
 COPY static /static
 
 EXPOSE 8080

@@ -1,14 +1,41 @@
+<script type="application/javascript">
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const field = document.getElementById("action_name");
+
+        function httpAsync(method, url, callback) {
+            const xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function () {
+                console.log(xmlHttp);
+                if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                    callback(xmlHttp.responseText);
+                }
+            };
+            xmlHttp.open(method, url, true); // true for asynchronous
+            xmlHttp.send(null);
+        }
+
+        window.triggerAction = function () {
+            const action = field.value;
+            if (action === void 0 || action === "") {
+                alert("Invalid action")
+            } else {
+                httpAsync("POST", "http://{{.ApiGatewayUrl}}/rooms/{{.Device.Room}}/devices/{{.Device.ID}}/actions/" + action, function (text) {
+                    alert(text)
+                });
+            }
+        }
+    }, false);
+</script>
+
 <h1>Device {{.Device.Name}}</h1>
 <p>ID: {{.Device.ID}}</p>
 <p>Mac: {{.Device.Mac}}</p>
 <p>Room: {{.Device.Room}}</p>
 
-<form action="http://localhost:5000/rooms/{{.Device.Room}}/devices/{{.Device.ID}}/actions/watering">
-    <input type="submit" name="watering" value="Perform 'watering' action"/>
-</form>
-
-<form action="http://localhost:5000/rooms/{{.Device.Room}}/devices/{{.Device.ID}}/actions/test">
-    <input type="submit" name="watering" value="Perform 'test' action"/>
+<form>
+    <label for="action_name">Action name</label><input id="action_name" type="text" name="action_name">
+    <input type="button" name="action_trigger" value="Perform action" onclick="triggerAction()"/>
 </form>
 
 <h2>Readings:</h2>

@@ -18,6 +18,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 )
 
 var templates = template.Must(template.ParseGlob("static/html/*"))
@@ -109,6 +110,10 @@ func GetDevice(w http.ResponseWriter, r *http.Request) {
 	repo, _ := repository.NewDeviceRepository()
 	device, err := repo.Get(roomId, deviceId)
 
+	serviceHost := os.Getenv("API_GATEWAY_HOST")
+	servicePort := os.Getenv("API_GATEWAY_PORT")
+	apiGatewayUrl := fmt.Sprintf("http://%s:%s", serviceHost, servicePort)
+
 	if err != nil {
 		errorHandler(w, http.StatusInternalServerError, "Cannot retrieve devices")
 		return
@@ -129,10 +134,11 @@ func GetDevice(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	data := DevicePageData{
-		Title:        "Device",
-		Device:       device,
-		Readings:     readings,
-		ErrorMessage: errorMessage,
+		Title:         "Device",
+		ApiGatewayUrl: apiGatewayUrl,
+		Device:        device,
+		Readings:      readings,
+		ErrorMessage:  errorMessage,
 	}
 
 	if err := templates.ExecuteTemplate(w, "device.html", data); err != nil {

@@ -101,11 +101,11 @@ func (r *DeviceRepository) GetAll(roomId string) ([]*model.Device, error) {
 	u := fmt.Sprintf("%s/rooms/%s/devices", r.devicesServiceUrl, roomId)
 
 	resp, err := http.Get(u)
-	defer resp.Body.Close()
-
 	if err != nil {
 		return nil, err
 	}
+
+	defer resp.Body.Close()
 
 	if resp.StatusCode == 404 {
 		return nil, nil
@@ -132,11 +132,11 @@ func (r *DeviceRepository) Insert(roomId string, device *model.Device) (*model.D
 	}
 
 	resp, err := http.Post(u, "application/json", bytes.NewBuffer(b))
-	defer resp.Body.Close()
-
 	if err != nil {
 		return nil, err
 	}
+
+	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
 		body, _ := ioutil.ReadAll(resp.Body)
@@ -162,11 +162,11 @@ func (r *DeviceRepository) InsertReading(roomId string, deviceId string, reading
 	}
 
 	resp, err := http.Post(u, "application/json", bytes.NewBuffer(b))
-	defer resp.Body.Close()
-
 	if err != nil {
 		return nil, err
 	}
+
+	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
 		body, _ := ioutil.ReadAll(resp.Body)
@@ -190,7 +190,7 @@ func NewDeviceRepository() (*DeviceRepository, error) {
 	servicePort := os.Getenv("API_GATEWAY_PORT")
 	if devicesRepository == nil {
 		u := fmt.Sprintf("http://%s:%s", serviceHost, servicePort)
-		log.Printf("DeviceService URL: %s\n", u)
+		log.Printf("ApiGateway URL: %s\n", u)
 
 		serviceUrl, err := url.Parse(u)
 		if err != nil {
