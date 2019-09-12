@@ -30,9 +30,9 @@ type Route struct {
 
 type Routes []Route
 
-func errorHandler(w http.ResponseWriter, status int32, message string) {
+func errorHandler(w http.ResponseWriter, status int, message string) {
 	r := model.ApiResponse{Code: status, Message: message}
-	w.WriteHeader(int(status))
+	w.WriteHeader(status)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	if err := json.NewEncoder(w).Encode(r); err != nil {
 		log.Println(err)
@@ -60,29 +60,36 @@ var routes = Routes{
 
 	Route{
 		"ListRooms",
-		strings.ToUpper("Get"),
+		strings.ToUpper(http.MethodGet),
 		"/rooms",
 		ListRooms,
 	},
 
 	Route{
 		"GetRoom",
-		strings.ToUpper("Get"),
+		strings.ToUpper(http.MethodGet),
 		"/rooms/{roomId}",
 		GetRoom,
 	},
 
 	Route{
 		"ListDevices",
-		strings.ToUpper("Get"),
+		strings.ToUpper(http.MethodGet),
 		"/rooms/{roomId}/devices",
 		ListDevices,
 	},
 
 	Route{
 		"GetDevice",
-		strings.ToUpper("Get"),
+		strings.ToUpper(http.MethodGet),
 		"/rooms/{roomId}/devices/{deviceId}",
 		GetDevice,
+	},
+
+	Route{
+		"TriggerAction",
+		strings.ToUpper(http.MethodPost),
+		"/rooms/{roomId}/devices/{deviceId}/actions/{actionName}",
+		TriggerAction,
 	},
 }

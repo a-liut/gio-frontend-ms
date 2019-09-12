@@ -20,7 +20,7 @@
             if (action === void 0 || action === "") {
                 alert("Invalid action")
             } else {
-                httpAsync("POST", "http://{{.ApiGatewayUrl}}/rooms/{{.Device.Room}}/devices/{{.Device.ID}}/actions/" + action, function (text) {
+                httpAsync("POST", "/rooms/{{.Device.Room}}/devices/{{.Device.ID}}/actions/" + action, function (text) {
                     alert(text)
                 });
             }

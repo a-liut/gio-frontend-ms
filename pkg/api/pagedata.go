@@ -18,9 +18,8 @@ type ListDevicesPageData struct {
 }
 
 type DevicePageData struct {
-	Title         string
-	ApiGatewayUrl string
-	Device        *model.Device
-	Readings      []*model.Reading
-	ErrorMessage  string
+	Title        string
+	Device       *model.Device
+	Readings     []*model.Reading
+	ErrorMessage string
 }

@@ -11,6 +11,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"gio-frontend-ms/pkg/model"
 	"gio-frontend-ms/pkg/repository"
@@ -18,7 +19,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"os"
 )
 
 var templates = template.Must(template.ParseGlob("static/html/*"))
@@ -110,10 +110,6 @@ func GetDevice(w http.ResponseWriter, r *http.Request) {
 	repo, _ := repository.NewDeviceRepository()
 	device, err := repo.Get(roomId, deviceId)
 
-	serviceHost := os.Getenv("API_GATEWAY_HOST")
-	servicePort := os.Getenv("API_GATEWAY_PORT")
-	apiGatewayUrl := fmt.Sprintf("http://%s:%s", serviceHost, servicePort)
-
 	if err != nil {
 		errorHandler(w, http.StatusInternalServerError, "Cannot retrieve devices")
 		return
@@ -134,14 +130,52 @@ func GetDevice(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	data := DevicePageData{
-		Title:         "Device",
-		ApiGatewayUrl: apiGatewayUrl,
-		Device:        device,
-		Readings:      readings,
-		ErrorMessage:  errorMessage,
+		Title:        "Device",
+		Device:       device,
+		Readings:     readings,
+		ErrorMessage: errorMessage,
 	}
 
 	if err := templates.ExecuteTemplate(w, "device.html", data); err != nil {
+		log.Println(err)
+	}
+}
+
+func TriggerAction(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	roomId := vars["roomId"]
+	deviceId := vars["deviceId"]
+	actionName := vars["actionName"]
+
+	repo, _ := repository.NewDeviceRepository()
+	device, err := repo.Get(roomId, deviceId)
+
+	if err != nil {
+		errorHandler(w, http.StatusInternalServerError, "Cannot retrieve devices")
+		return
+	}
+
+	if device == nil {
+		errorHandler(w, http.StatusNotFound, "Device not found")
+		return
+	}
+
+	err = repo.TriggerAction(roomId, deviceId, actionName)
+
+	message := "Action triggered successfully"
+	code := http.StatusOK
+	if err != nil {
+		message = err.Error()
+		code = http.StatusInternalServerError
+	}
+
+	m := model.ApiResponse{
+		Code:    code,
+		Message: message,
+	}
+
+	w.WriteHeader(code)
+	if err := json.NewEncoder(w).Encode(m); err != nil {
 		log.Println(err)
 	}
 }
