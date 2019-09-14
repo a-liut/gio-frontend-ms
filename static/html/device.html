@@ -13,6 +13,7 @@
                 }
             };
             xmlHttp.open(method, url, true); // true for asynchronous
+            xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xmlHttp.send(body);
         }
 
@@ -24,9 +25,9 @@
             } else {
                 let body = null;
                 if (value) {
-                    body = {
+                    body = JSON.stringify({
                         value: value
-                    };
+                    });
                 }
                 httpAsync("POST", "/rooms/{{.Device.Room}}/devices/{{.Device.ID}}/actions/" + action, body, function (text) {
                     alert(text)
