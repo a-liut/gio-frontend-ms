@@ -141,11 +141,28 @@ func GetDevice(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func getActionData(r *http.Request) *model.ActionData {
+	var actionData model.ActionData
+	err := json.NewDecoder(r.Body).Decode(&actionData)
+	if err != nil {
+		return nil
+	}
+
+	return &actionData
+}
+
 func TriggerAction(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	roomId := vars["roomId"]
 	deviceId := vars["deviceId"]
 	actionName := vars["actionName"]
+
+	log.Printf("TriggerDeviceAction called: %s", actionName)
+
+	actionData := getActionData(r)
+	if actionData == nil {
+		log.Printf("WARNING: no data passed for action %s", actionName)
+	}
 
 	repo, _ := repository.NewDeviceRepository()
 	device, err := repo.Get(roomId, deviceId)
@@ -160,7 +177,7 @@ func TriggerAction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = repo.TriggerAction(roomId, deviceId, actionName)
+	err = repo.TriggerAction(roomId, deviceId, actionName, actionData)
 
 	message := "Action triggered successfully"
 	code := http.StatusOK

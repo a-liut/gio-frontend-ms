@@ -15,6 +15,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gio-frontend-ms/pkg/model"
+	"gio-frontend-ms/pkg/utils"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -183,10 +184,22 @@ func (r *DeviceRepository) InsertReading(roomId string, deviceId string, reading
 	return &rea, nil
 }
 
-func (r *DeviceRepository) TriggerAction(roomId string, deviceId string, actionName string) error {
+func getActionBodyData(data *model.ActionData) *bytes.Buffer {
+	if data != nil {
+		body, err := json.Marshal(data)
+		if err == nil {
+			return bytes.NewBuffer(body)
+		}
+	}
+
+	return nil
+}
+
+func (r *DeviceRepository) TriggerAction(roomId string, deviceId string, actionName string, actionData *model.ActionData) error {
 	u := fmt.Sprintf("%s/rooms/%s/devices/%s/actions/%s", r.devicesServiceUrl, roomId, deviceId, actionName)
 
-	resp, err := http.Post(u, "application/json", nil)
+	bodyData := getActionBodyData(actionData)
+	resp, err := utils.DoPost(u, bodyData)
 	if err != nil {
 		return err
 	}
