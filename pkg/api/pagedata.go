@@ -14,12 +14,12 @@ type RoomPageData struct {
 
 type ListDevicesPageData struct {
 	Title   string
-	Devices []*model.Device
+	Devices []model.Device
 }
 
 type DevicePageData struct {
 	Title        string
 	Device       *model.Device
-	Readings     []*model.Reading
+	Readings     []model.Reading
 	ErrorMessage string
 }

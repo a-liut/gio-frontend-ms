@@ -19,6 +19,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"sort"
 )
 
 var templates = template.Must(template.ParseGlob("static/html/*"))
@@ -124,8 +125,10 @@ func GetDevice(w http.ResponseWriter, r *http.Request) {
 	errorMessage := ""
 	if err != nil {
 		errorMessage = err.Error()
-		readings = []*model.Reading{}
+		readings = []model.Reading{}
 	}
+
+	sort.Sort(model.ByCreationTimestamp(readings))
 
 	w.WriteHeader(http.StatusOK)
 

@@ -55,7 +55,7 @@ func (r *DeviceRepository) Get(roomId string, id string) (*model.Device, error) 
 	return &d, nil
 }
 
-func (r *DeviceRepository) GetReadings(roomId string, id string, limit int, name string) ([]*model.Reading, error) {
+func (r *DeviceRepository) GetReadings(roomId string, id string, limit int, name string) ([]model.Reading, error) {
 	u := fmt.Sprintf("%s/rooms/%s/devices/%s/readings", r.devicesServiceUrl, roomId, id)
 
 	var queryParams []string
@@ -88,7 +88,7 @@ func (r *DeviceRepository) GetReadings(roomId string, id string, limit int, name
 		return nil, fmt.Errorf("error while getting data for device %s", id)
 	}
 
-	var rs []*model.Reading
+	var rs []model.Reading
 	err = json.NewDecoder(resp.Body).Decode(&rs)
 
 	if err != nil {
@@ -98,7 +98,7 @@ func (r *DeviceRepository) GetReadings(roomId string, id string, limit int, name
 	return rs, nil
 }
 
-func (r *DeviceRepository) GetAll(roomId string) ([]*model.Device, error) {
+func (r *DeviceRepository) GetAll(roomId string) ([]model.Device, error) {
 	u := fmt.Sprintf("%s/rooms/%s/devices", r.devicesServiceUrl, roomId)
 
 	resp, err := http.Get(u)
@@ -114,7 +114,7 @@ func (r *DeviceRepository) GetAll(roomId string) ([]*model.Device, error) {
 		return nil, fmt.Errorf("error while getting data for devices")
 	}
 
-	var d []*model.Device
+	var d []model.Device
 	err = json.NewDecoder(resp.Body).Decode(&d)
 
 	if err != nil {

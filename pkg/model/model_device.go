@@ -45,6 +45,20 @@ type Reading struct {
 	CreationTimestamp string `json:"creation_timestamp"`
 }
 
+type ByCreationTimestamp []Reading
+
+func (b ByCreationTimestamp) Len() int {
+	return len(b)
+}
+
+func (b ByCreationTimestamp) Less(i, j int) bool {
+	return b[i].CreationTimestamp > b[j].CreationTimestamp
+}
+
+func (b ByCreationTimestamp) Swap(i, j int) {
+	b[i], b[j] = b[j], b[i]
+}
+
 type ActionData struct {
 	Value int `json:"value"`
 }
