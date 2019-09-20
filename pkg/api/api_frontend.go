@@ -186,7 +186,7 @@ func TriggerAction(w http.ResponseWriter, r *http.Request) {
 	code := http.StatusOK
 	if err != nil {
 		message = err.Error()
-		code = http.StatusInternalServerError
+		code = http.StatusBadRequest
 	}
 
 	m := model.ApiResponse{
