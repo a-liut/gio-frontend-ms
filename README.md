@@ -31,4 +31,4 @@ go build -o frontend cmd/frontend/main.go
 
 - /rooms/{roomId}/devices: Lists all available devices in a room
 
-- /rooms/{roomId}/devices/{deviceId}: Gets information about a device in a room
+- /rooms/{roomId}/devices/{deviceId}: Gets information about a device in a room. It allows to trigger actions specifying a value for them.
